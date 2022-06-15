@@ -1,126 +1,124 @@
 package com.hampcode.service;
 
-import com.hampcode.converter.UserConverter;
 import com.hampcode.dto.LoginRequestDto;
 import com.hampcode.dto.LoginResponseDto;
+import com.hampcode.dto.SignupRequestDto;
 import com.hampcode.exception.GeneralServiceException;
 import com.hampcode.exception.IncorrectRequestException;
 import com.hampcode.exception.NotFoundException;
+import com.hampcode.model.ERole;
+import com.hampcode.model.Role;
 import com.hampcode.model.User;
+import com.hampcode.repository.RoleRepository;
 import com.hampcode.repository.UserRepository;
-import com.hampcode.validators.UserValidator;
-import io.jsonwebtoken.*;
-import org.springframework.beans.factory.annotation.Value;
+import com.hampcode.security.jwt.JwtUtils;
+import com.hampcode.security.services.UserPrincipal;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
-    @Value("${jwt.password}")
-    private String jwtSecret;
 
-    private final UserRepository userRepository;
+    @Autowired
+    UserRepository userRepository;
 
-    private final UserConverter userConverter;
+    @Autowired
+    RoleRepository roleRepository;
 
-    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    PasswordEncoder encoder;
 
-    public UserService(UserRepository userRepository, UserConverter userConverter, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.userConverter = userConverter;
-        this.passwordEncoder = passwordEncoder;
-    }
+    @Autowired
+    JwtUtils jwtUtils;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
+
 
     @Transactional
-    public User createUser(User user) {
-        try {
-            UserValidator.validate(user);
-            User existUser=userRepository.findByUserName(user.getUserName())
-                    .orElse(null);
-            if(existUser!=null)
-                throw new IncorrectRequestException("El nombre usuario ya existe");
-
-            String encoder=passwordEncoder.encode(user.getPassword());
-            user.setPassword(encoder);
-
-            return userRepository.save(user);
-        } catch (IncorrectRequestException | NotFoundException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new GeneralServiceException(e.getMessage(), e);
+    public User registerUser(SignupRequestDto signupRequestDto) {
+        if (userRepository.existsByUsername(signupRequestDto.getUsername())) {
+            throw new IncorrectRequestException("El nombre usuario ya existe");
         }
-    }
 
-    public List<User> findAll(){
-        try {
-            return userRepository.findAll();
-        } catch (IncorrectRequestException | NotFoundException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new GeneralServiceException(e.getMessage(), e);
+        if (userRepository.existsByEmail(signupRequestDto.getEmail())) {
+            throw new IncorrectRequestException("El email del usuario ya existe");
         }
-    }
 
-    public LoginResponseDto login(LoginRequestDto request){
-        try {
-            User user=userRepository.findByUserName(request.getUserName())
-                    .orElseThrow(()->new IncorrectRequestException("Usuario o password incorrecto"));
+        // Create new user's account
+        User user = new User(signupRequestDto.getUsername(),
+                signupRequestDto.getEmail(),
+                encoder.encode(signupRequestDto.getPassword()));
 
-            if(!passwordEncoder.matches(request.getPassword(),user.getPassword()))
-                throw new IncorrectRequestException("Usuario o password incorrectos");
+        Set<String> strRoles = signupRequestDto.getRole();
+        Set<Role> roles = new HashSet<>();
 
-            String token =createToken(user);
 
-            return new LoginResponseDto(userConverter.convertEntityToDto(user),token);
+        if (strRoles == null) {
+            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(userRole);
+        } else {
+            strRoles.forEach(role -> {
+                switch (role) {
+                    case "admin":
+                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(adminRole);
 
-        } catch (IncorrectRequestException | NotFoundException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new GeneralServiceException(e.getMessage(), e);
+                        break;
+                    case "mod":
+                        Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(modRole);
+
+                        break;
+                    default:
+                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(userRole);
+                }
+            });
         }
+
+        user.setRoles(roles);
+        return userRepository.save(user);
     }
 
-    public String createToken(User user){
-        Date now =new Date();
-        Date expiryDate=new Date(now.getTime()+ (1000*60*60*24));
 
-        return Jwts.builder()
-                .setSubject(user.getUserName())
-                .setIssuedAt(now)
-                .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512,jwtSecret).compact();
+    public LoginResponseDto authenticateUser(LoginRequestDto request){
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
+
+        UserPrincipal userDetails = (UserPrincipal) authentication.getPrincipal();
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(item -> item.getAuthority())
+                .collect(Collectors.toList());
+
+        return new LoginResponseDto(jwt,
+                userDetails.getId(),
+                userDetails.getUsername(),
+                userDetails.getEmail(),
+                roles);
     }
 
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
-            return true;
-        }catch (UnsupportedJwtException e) {
-            //log.error("JWT in a particular format/configuration that does not match the format expected");
-        }catch (MalformedJwtException e) {
-            //log.error(" JWT was not correctly constructed and should be rejected");
-        }catch (SignatureException e) {
-            //log.error("Signature or verifying an existing signature of a JWT failed");
-        }catch (ExpiredJwtException e) {
-            //log.error("JWT was accepted after it expired and must be rejected");
-        }
-        return false;
-    }
 
-    public String getUsernameFromToken(String jwt) {
-        try {
-            return Jwts.parser().setSigningKey(jwtSecret)
-                    .parseClaimsJws(jwt)
-                    .getBody()
-                    .getSubject();
-        } catch (Exception e) {
-            throw new IncorrectRequestException("Invalid Token");
-        }
-    }
 
 
 

@@ -23,7 +23,7 @@ public class UserConverter {
         return modelMapper.map(userDto, User.class);
     }
 
-    public User signup(SignupRequestDto signupRequestDto){
-        return modelMapper.map(signupRequestDto, User.class);
+    public UserDto signup(SignupRequestDto signupRequestDto){
+        return modelMapper.map(signupRequestDto, UserDto.class);
     }
 }

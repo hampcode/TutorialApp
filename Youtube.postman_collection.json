@@ -216,7 +216,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"userName\":\"hampcode\",\n\t\"password\":\"HolaMundo\"\n}",
+					"raw": "{\n\t\"username\":\"devacademyweb\",\n        \"email\":\"devacademyweb@gmail.com\",\n\t\"password\":\"12345678\",\n        \"role\":[\"user\",\"admin\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -224,13 +224,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/signup",
+					"raw": "http://localhost:8080/api/auth/signup",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"api",
+						"auth",
 						"signup"
 					]
 				}
@@ -238,19 +240,30 @@
 			"response": []
 		},
 		{
-			"name": "Login",
+			"name": "Signin",
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"username\":\"user\",\r\n        \"password\":\"12345678\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:8080/login",
+					"raw": "http://localhost:8080/api/auth/signin",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"login"
+						"api",
+						"auth",
+						"signin"
 					]
 				}
 			},
