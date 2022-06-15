@@ -1,0 +1,58 @@
+<div class="container">
+  <div class="columns is-centered">
+    <div class="column is-6-tablet is-5-desktop is-4-widescreen">
+      <div *ngIf="invalid" class="notification is-danger has-text-centered">
+        Las credenciales ingresadas son inválidas.
+      </div>
+
+      <form (ngSubmit)="onSubmit()" class="box" #loginForm="ngForm">
+        <div class="field">
+          <label for="" class="label">Username</label>
+          <div class="control has-icons-left">
+            <input
+              required
+              name="username"
+              type="text"
+              placeholder="admin@upc.pe"
+              class="input"
+              [(ngModel)]="model.userName"
+              #email="ngModel"
+            />
+            <span class="icon is-small is-left">
+              <i class="fa fa-envelope"></i>
+            </span>
+          </div>
+          <ng-container *ngIf="email.invalid && email.dirty">
+            <span class="help is-danger">El campo e-mail es requerido.</span>
+          </ng-container>
+        </div>
+
+        <div class="field">
+          <label for="" class="label">Password</label>
+          <div class="control has-icons-left">
+            <input
+              required
+              name="password"
+              type="password"
+              placeholder="123456"
+              class="input"
+              [(ngModel)]="model.password"
+              #password="ngModel"
+            />
+            <span class="icon is-small is-left">
+              <i class="fa fa-lock"></i>
+            </span>
+          </div>
+          <ng-container *ngIf="password.invalid && password.dirty">
+            <span class="help is-danger">El campo password es requerido.</span>
+          </ng-container>
+        </div>
+        <div class="field">
+          <button [disabled]="!loginForm.form.valid" class="button is-success">
+            Login
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

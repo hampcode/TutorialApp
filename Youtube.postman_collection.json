@@ -1,0 +1,287 @@
+{
+	"info": {
+		"_postman_id": "d24470c0-2f34-43b9-97b3-1e0abb77e5e9",
+		"name": "Youtube",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6246033"
+	},
+	"item": [
+		{
+			"name": "Create tutorials",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"title\":\"Spring Boot PostgreSQL Tut#10\",\r\n        \"description\":\"Tu#10 Description\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/tutorials",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"tutorials"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update tutorial",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \r\n        \"title\":\"PostgreSQL DB Tut#10\",\r\n        \"description\":\"Desc for Tu#10\",\r\n        \"published\":true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/tutorials/1012\n",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"tutorials",
+						"1012\n"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all tutorials",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/tutorials",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"tutorials"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a tutorial by Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/tutorials/10",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"tutorials",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find all published tutorials",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/tutorials/published",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"tutorials",
+						"published"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find all tutorials whitc title contains ",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/tutorials/?title=dd",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"tutorials",
+						""
+					],
+					"query": [
+						{
+							"key": "title",
+							"value": "dd"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a tutorial",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/tutorials/10",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"tutorials",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find all published tutorial paging",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/tutorials/published?page=0",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"tutorials",
+						"published"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all tutorial paging",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/tutorials?title=ring&page=0&size=4",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"tutorials"
+					],
+					"query": [
+						{
+							"key": "title",
+							"value": "ring"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"userName\":\"hampcode\",\n\t\"password\":\"HolaMundo\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080/api",
+			"type": "string"
+		}
+	]
+}

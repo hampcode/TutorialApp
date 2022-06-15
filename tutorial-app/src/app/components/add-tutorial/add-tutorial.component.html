@@ -1,0 +1,53 @@
+<div>
+  <form (ngSubmit)="newTutorial()" #tutorialForm="ngForm">
+    <div class="submit-form">
+      <div *ngIf="!submitted">
+        <div class="form-group">
+          <label for="title">Titulo</label>
+          <input
+            type="text"
+            class="form-control"
+            id="title"
+            required
+            [(ngModel)]="tutorial.title"
+            name="title"
+            required
+            #title="ngModel"
+          />
+          <div [hidden]="!title.pristine" class="alert alert-danger">
+            Titulo es requerido
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Descripción</label>
+          <input
+            class="form-control"
+            id="description"
+            required
+            [(ngModel)]="tutorial.description"
+            name="description"
+            required
+            #description="ngModel"
+          />
+          <div [hidden]="!description.pristine" class="alert alert-danger">
+            Descripción es requerido
+          </div>
+        </div>
+        <button
+          (click)="saveTutorial()"
+          [disabled]="!tutorialForm.form.valid"
+          class="btn btn-success"
+        >
+          Registrar
+        </button>
+      </div>
+      <div *ngIf="submitted">
+        <h4>Tutorial generado!</h4>
+        <button class="btn btn-success" (click)="newTutorial()">
+          Nuevo Tutorial
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
