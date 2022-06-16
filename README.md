@@ -18,10 +18,8 @@
 </p>
 
 <p align="center">
-    <img alt="Diseño del proyecto" width="650px" src="/img/design.JPG" />
-    <img alt="Diseño del proyecto" width="650px" src="/img/design01.JPG" />
-    <img alt="Diseño del proyecto" width="650px" src="/img/design02.JPG" />
-    <img alt="Diseño del proyecto" width="650px" src="/img/design03.JPG" />
+    <img alt="Diseño del proyecto" width="650px" src="./img/design.jpg" />
+    
 <p>
 
 ## :bookmark: Sobre el Proyecto
