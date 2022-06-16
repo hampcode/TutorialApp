@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hampcode.model.Tutorial;
 
 @RestController
-@RequestMapping("/api/tutorials")
+@RequestMapping("/tutorials")
 public class TutorialController {
 
 	private TutorialService tutorialService;
