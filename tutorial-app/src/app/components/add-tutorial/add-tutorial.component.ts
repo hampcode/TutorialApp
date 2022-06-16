@@ -14,6 +14,7 @@ export class AddTutorialComponent implements OnInit {
     published: false,
   };
   submitted = false;
+  content?: string;
 
   constructor(private tutorialService: TutorialService) {}
 
@@ -29,7 +30,7 @@ export class AddTutorialComponent implements OnInit {
         console.log(res);
         this.submitted = true;
       },
-      error: (e) => console.error(e),
+      error: (e) => (this.content = e.error.message),
     });
   }
   newTutorial(): void {

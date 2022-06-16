@@ -81,7 +81,7 @@ public class TutorialController {
 			return new ResponseEntity<>(tutorialConverter.convertEntityToDto(tutorial), HttpStatus.CREATED);
 	}
 
-	@PreAuthorize("hasRole('USER')  or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/{id}")
 	public ResponseEntity<TutorialResponseDto> updateTutorial(@PathVariable("id") long id,@RequestBody TutorialRequestDto tutorialRequestDto) {
 		Tutorial tutorial = tutorialService.updateTutorial(id,tutorialRequestDto);
@@ -95,7 +95,7 @@ public class TutorialController {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
-	@PreAuthorize("hasRole('USER')  or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping
 	public ResponseEntity<HttpStatus> deleteAllTutorials() {
 			tutorialService.deleteAllTutorials();

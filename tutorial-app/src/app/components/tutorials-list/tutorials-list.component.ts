@@ -8,25 +8,22 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./tutorials-list.component.css'],
 })
 export class TutorialsListComponent implements OnInit {
-  //tutorials?: Tutorial[];
   tutorials: Tutorial[] = [];
   currentTutorial: Tutorial = {};
   currentIndex = -1;
   title = '';
 
-  ///
   page = 1;
   count = 0;
   pageSize = 3;
   pageSizes = [3, 6, 9];
-
+  content?: string;
   constructor(private tutorialService: TutorialService) {}
 
   ngOnInit(): void {
     this.retrieveTutorials();
   }
 
-  ///
   getRequestParams(searchTitle: string, page: number, pageSize: number): any {
     let params: any = {};
     if (searchTitle) {
@@ -40,29 +37,18 @@ export class TutorialsListComponent implements OnInit {
     }
     return params;
   }
-  ///
 
   retrieveTutorials(): void {
-    ///
     const params = this.getRequestParams(this.title, this.page, this.pageSize);
-    ///
-    /*this.tutorialService.getAll().subscribe({
-      next: (data) => {
-        this.tutorials = data;
-        console.log(data);
-      },
-      error: (e) => console.error(e),
-    });*/
 
     this.tutorialService.getAll(params).subscribe(
       (response) => {
         const { tutorials, totalItems } = response;
         this.tutorials = tutorials;
         this.count = totalItems;
-        //console.log(response);
       },
       (error) => {
-        console.log(error);
+        this.content = error.message;
       }
     );
   }
@@ -92,19 +78,10 @@ export class TutorialsListComponent implements OnInit {
         console.log(res);
         this.refreshList();
       },
-      error: (e) => console.error(e),
+      error: (e) => (this.content = e.error.message),
     });
   }
   searchTitle(): void {
-    /*this.currentTutorial = {};
-    this.currentIndex = -1;
-    this.tutorialService.findByTitle(this.title).subscribe({
-      next: (data) => {
-        this.tutorials = data;
-        console.log(data);
-      },
-      error: (e) => console.error(e),
-    });*/
     this.page = 1;
     this.retrieveTutorials();
   }

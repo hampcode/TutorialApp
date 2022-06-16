@@ -9,11 +9,11 @@ import { TutorialDetailsComponent } from './components/tutorial-details/tutorial
 import { TutorialsListComponent } from './components/tutorials-list/tutorials-list.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { authInterceptorProviders } from './interceptors/auth.interceptor';
 import { LoginComponent } from './components/login/login.component';
-
-// Interceptors
-import { AuthInterceptor } from './interceptors/auth.interceptor';
-import { UnauthorizedInterceptor } from './interceptors/unauthorized.interceptor';
+import { RegisterComponent } from './components/register/register.component';
+import { HomeComponent } from './components/home/home.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +22,9 @@ import { UnauthorizedInterceptor } from './interceptors/unauthorized.interceptor
     TutorialDetailsComponent,
     TutorialsListComponent,
     LoginComponent,
+    RegisterComponent,
+    HomeComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,
@@ -31,14 +34,7 @@ import { UnauthorizedInterceptor } from './interceptors/unauthorized.interceptor
     NgxPaginationModule,
     ReactiveFormsModule,
   ],
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: UnauthorizedInterceptor,
-      multi: true,
-    },
-  ],
+  providers: [authInterceptorProviders],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

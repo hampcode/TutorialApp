@@ -16,6 +16,7 @@ export class TutorialDetailsComponent implements OnInit {
     published: false,
   };
   message = '';
+  content?: string;
   constructor(
     private tutorialService: TutorialService,
     private route: ActivatedRoute,
@@ -35,7 +36,7 @@ export class TutorialDetailsComponent implements OnInit {
         this.currentTutorial = data;
         console.log(data);
       },
-      error: (e) => console.error(e),
+      error: (e) => (this.content = e.error.message),
     });
   }
   updatePublished(status: boolean): void {
@@ -53,7 +54,8 @@ export class TutorialDetailsComponent implements OnInit {
           ? res.message
           : '¡El estado se actualizó con éxito!';
       },
-      error: (e) => console.error(e),
+      //error: (e) => console.error(e),
+      error: (e) => (this.content = e.error.message),
     });
   }
   updateTutorial(): void {
@@ -67,7 +69,7 @@ export class TutorialDetailsComponent implements OnInit {
             ? res.message
             : '¡Este tutorial se actualizó con éxito!';
         },
-        error: (e) => console.error(e),
+        error: (e) => (this.content = e.error.message),
       });
   }
   deleteTutorial(): void {
@@ -76,7 +78,7 @@ export class TutorialDetailsComponent implements OnInit {
         console.log(res);
         this.router.navigate(['/tutorials']);
       },
-      error: (e) => console.error(e),
+      error: (e) => (this.content = e.error.message),
     });
   }
 }
