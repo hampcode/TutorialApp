@@ -30,7 +30,6 @@
 - [JSON Web Token](https://jwt.io/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Angular](https://angular.io/)
-- [Angular Material](https://material.angular.io/)
 
 ## :boom: Como Ejecutarlo
 
