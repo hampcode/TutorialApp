@@ -17,13 +17,6 @@
     <a href="#boom-como-ejecutarlo">Como Ejecutarlo</a>
 </p>
 
-<p align="center">
-    <img alt="Diseño del proyecto" width="650px" src="./img/design.jpg" />
-    <img alt="Diseño del proyecto" width="650px" src="./img/design01.jpg" />
-    <img alt="Diseño del proyecto" width="650px" src="./img/design02.jpg" />
-    <img alt="Diseño del proyecto" width="650px" src="./img/design03.jpg" />
-<p>
-
 ## :bookmark: Sobre el Proyecto
 
 **Tutorial App** es una aplicación web destinada a permitir generar tutoriales con su registro de usuario e inicio de sesión.
@@ -61,3 +54,10 @@
   $ npm install
 
 ```
+
+<p align="center">
+    <img alt="Diseño del proyecto" width="650px" src="./img/design.jpg" />
+    <img alt="Diseño del proyecto" width="650px" src="./img/design01.jpg" />
+    <img alt="Diseño del proyecto" width="650px" src="./img/design02.jpg" />
+    <img alt="Diseño del proyecto" width="650px" src="./img/design03.jpg" />
+<p>
