@@ -34,7 +34,6 @@ export class TutorialDetailsComponent implements OnInit {
     this.tutorialService.get(id).subscribe({
       next: (data) => {
         this.currentTutorial = data;
-        console.log(data);
       },
       error: (e) => (this.content = e.error.message),
     });
@@ -54,7 +53,6 @@ export class TutorialDetailsComponent implements OnInit {
           ? res.message
           : '¡El estado se actualizó con éxito!';
       },
-      //error: (e) => console.error(e),
       error: (e) => (this.content = e.error.message),
     });
   }

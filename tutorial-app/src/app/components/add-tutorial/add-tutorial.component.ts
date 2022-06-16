@@ -27,7 +27,6 @@ export class AddTutorialComponent implements OnInit {
     };
     this.tutorialService.create(data).subscribe({
       next: (res) => {
-        console.log(res);
         this.submitted = true;
       },
       error: (e) => (this.content = e.error.message),
